@@ -14,6 +14,7 @@ log_loger::~log_loger() { LogFile.close(); }
 
 void log_loger::ReadWholeLog() {
   if (LogFile.good()) {
+    FileLineNumber=GetLineNumber();
     LogContent.clear();
     LogFile.seekg(0, std::ios::end);
     LogContent.reserve(LogFile.tellg());
@@ -21,24 +22,37 @@ void log_loger::ReadWholeLog() {
     LogContent.assign((std::istreambuf_iterator<char>(LogFile)),
                       std::istreambuf_iterator<char>());
   }
-    LastContentRead=0;
+  LastContentRead = 0;
 }
 
-
-void log_loger::ReadWholeLog(int num_read)
-{
-int number(0);
-int tmp(0);
-LastContentRead=num_read;
-std::string unused;
-if (LogFile.good()) {
-while(std::getline(LogFile,unused)){++number;}
-LogFile.close();
-LogFile.open(LogFileName);
-while(std::getline(LogFile,unused)){++tmp; if(tmp >(number-num_read)){LogContent+=unused; LogContent+="\n\r";}}
-}
+int log_loger::GetLineNumber() {
+  int number(0);
+  int tmp(0);
+  std::string unused;
+  while (std::getline(LogFile, unused)) {
+    ++number;
+  }
+  LogFile.close();
+  LogFile.open(LogFileName);
+  return number;
 }
 
+void log_loger::ReadWholeLog(int num_read) {
+  int number = GetLineNumber();
+    FileLineNumber = number;
+    LastContentRead=num_read;
+    std::string unused;
+    int tmp(0);
+    while (std::getline(LogFile, unused)) {
+      ++tmp;
+      if (tmp > (number - num_read)) {
+        LogContent += unused;
+        LogContent += "\n\r";
+      }
+    }
+  LogFile.close();
+  LogFile.open(LogFileName);
+}
 
 std::string log_loger::ReadNewData() {
   if (LogContent.length() > LogContentOld.length()) {
@@ -48,10 +62,24 @@ std::string log_loger::ReadNewData() {
 }
 
 void log_loger::UpdateData() {
+  OldFileLineNumber=FileLineNumber;
+  int diff=GetLineNumber();
+  diff-=OldFileLineNumber;
+  std::cout <<"Diff in len in file: " << diff <<std::endl;
+
   LogContentOld.clear();
   LogContentOld = LogContent;
-  if(LastContentRead==0){ReadWholeLog();} else
-  if(LastContentRead>0) {ReadWholeLog(LastContentRead);}
+  if(diff > 0)
+  {
+    ReadWholeLog(diff);
+
+  }
+  /*
+  if (LastContentRead == 0) {
+    ReadWholeLog(LastContentRead);
+  } else if (LastContentRead > 0) {
+    ReadWholeLog(LastContentRead);
+  }*/
 }
 
 std::string log_loger::ReadLog() { return LogContent; }

@@ -10,7 +10,10 @@ class log_loger {
   std::string LogContent;
   std::string LogContentOld;
   int LastContentRead;
+  int FileLineNumber;
+  int OldFileLineNumber;
   std::ifstream LogFile;
+  //int GetLineNumber();
   std::string EraseOldContent(std::string& ActualData,
                               const std::string& OldContent);
 
@@ -23,6 +26,7 @@ class log_loger {
   void ReadWholeLog();
   void ReadWholeLog(int num_read);
   std::string GetFileName();
+  int GetLineNumber();
 };
 
 #endif
