@@ -63,8 +63,8 @@ std::string log_loger::ReadNewData() {
 
 void log_loger::UpdateData() {
   OldFileLineNumber=FileLineNumber;
-  int diff=GetLineNumber();
-  diff-=OldFileLineNumber;
+  int diff= GetLineNumber() - OldFileLineNumber;
+
   std::cout <<"Diff in len in file: " << diff <<std::endl;
 
   LogContentOld.clear();

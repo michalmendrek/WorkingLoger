@@ -17,7 +17,7 @@ notify::notify(std::string LogDir) {
   inotifyFD = inotify_init();
   if (inotifyFD == -1) {
   }
-  inotifyWD = inotify_add_watch(inotifyFD, File.c_str(), IN_CLOSE_WRITE);
+  inotifyWD = inotify_add_watch(inotifyFD, File.c_str(), IN_MODIFY);
   if (inotifyWD == -1) {
   }
   callback_wrapper = std::bind1st(std::mem_fun(&notify::handler), this);
@@ -37,9 +37,11 @@ void notify::handler(int sig) {
     for (p = buff; p < buff + numRead;) {
       event = (struct inotify_event *)p;
       if (event->len > 0) {
+	//std::cout << "Zdarzenie ------------------+++++++++++++++++---------------------" <<std::endl;
         for (auto it : File) {
-	 std::cout << "Loger File: " << std::get<0>(it) << std::endl;
+	 //std::cout << "Loger File: " << std::get<0>(it) << std::endl;
           if (event->name == std::get<0>(it)) {
+	    std::cout << "Loger File: " << std::get<0>(it) << std::endl;
             if (std::get<1>(it) != nullptr) {
               // std::get<1>(it)();
               //}

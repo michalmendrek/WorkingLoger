@@ -20,7 +20,7 @@ int main() {
   //cout << plik.ReadLog() << endl;
   log_module plik("/var/log/");
   plik.AddModule("DrowsinessModule", funkcja_testu);
-  std::cout << plik.GetWholeLog("DrowsinessModule", 20) << std::endl;
+  std::cout << plik.GetWholeLog("DrowsinessModule",10) << std::endl;
   while (1)
     ;
 }

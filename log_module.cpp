@@ -60,6 +60,8 @@ std::string log_module::GetWholeLog(std::string ModuleName, int len) {
       WholeLog += it->ReadLog();
     }
   }
+
+/*
   if(len>0)
  {
  std::vector<std::string> lines = splitter(R"(\n)", WholeLog);
@@ -70,6 +72,6 @@ std::string log_module::GetWholeLog(std::string ModuleName, int len) {
          WholeLog+=*rit;
          WholeLog+="\n\r";
         }
-}
+}*/
   return WholeLog;
 }
