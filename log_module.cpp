@@ -55,23 +55,9 @@ std::string log_module::GetWholeLog(std::string ModuleName, int len) {
   for (auto it : Loger) {
     auto out = (it->GetFileName()).find(ModuleName);
     if (out != std::string::npos) {
-      it->ReadWholeLog();
-      if(len==0){
+      if(len>0){it->ReadWholeLog(len);} else
+      {it->ReadWholeLog();}
       WholeLog += it->ReadLog();
-      } else
-     if(len >0)
-     {
-	int tmp_len=0;
-	std::vector<std::string> lines = splitter(R"(\n)", it->ReadLog());
-	std::vector<std::string>::reverse_iterator rit = lines.rbegin();
-	for(; rit!=lines.rend();++rit)
-	{
-	 WholeLog+=*rit;
-	 WholeLog+="\n\r";
-	if(++tmp_len>len){break;}
-	}
-
-     }
     }
   }
   if(len>0)
