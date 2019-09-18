@@ -21,6 +21,7 @@ void log_loger::ReadWholeLog() {
     LogContent.assign((std::istreambuf_iterator<char>(LogFile)),
                       std::istreambuf_iterator<char>());
   }
+    LastContentRead=0;
 }
 
 
@@ -28,6 +29,7 @@ void log_loger::ReadWholeLog(int num_read)
 {
 int number(0);
 int tmp(0);
+LastContentRead=num_read;
 std::string unused;
 if (LogFile.good()) {
 while(std::getline(LogFile,unused)){++number;}
@@ -48,7 +50,8 @@ std::string log_loger::ReadNewData() {
 void log_loger::UpdateData() {
   LogContentOld.clear();
   LogContentOld = LogContent;
-  ReadWholeLog();
+  if(LastContentRead==0){ReadWholeLog();} else
+  if(LastContentRead>0) {ReadWholeLog(LastContentRead);}
 }
 
 std::string log_loger::ReadLog() { return LogContent; }

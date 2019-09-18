@@ -9,6 +9,7 @@ class log_loger {
   std::string LogFileName;
   std::string LogContent;
   std::string LogContentOld;
+  int LastContentRead;
   std::ifstream LogFile;
   std::string EraseOldContent(std::string& ActualData,
                               const std::string& OldContent);
